@@ -2,11 +2,11 @@ pipeline {
     agent any
     
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                // Checkout source code from your repository
-                checkout scm
+                git branch: 'main', url: 'https://github.com/Divya642003/demo1.git'
             }
+        }
         }
         
         stage('Build Docker Image') {
