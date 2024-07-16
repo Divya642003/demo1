@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout source code from your repository
+                checkout scm
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build('my-django-app:latest', '.')
+                }
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                script {
+                    docker.image('my-django-app:latest').inside {
+                        sh 'pytest --junitxml=results.xml'
+                    }
+                }
+            }
+        }
+        
+        stage('Publish Test Results') {
+            steps {
+                junit 'results.xml'
+            }
+        }
+    }
+}
